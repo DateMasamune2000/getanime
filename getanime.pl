@@ -5,6 +5,10 @@ use JSON;
 use Term::ReadKey;
 use LWP::Simple;
 
+if ($#ARGV != 0) { die "Incorrect number of arguments (expected 1)\n"; }
+
+$username = $argv[0];
+
 $json_text = get('http://api.jikan.moe/v4/seasons/upcoming');
 
 die "Failed to get content\n", unless defined $json_text;
@@ -19,7 +23,7 @@ chop($password);
 ReadMode('restore');
 
 my $dsn = "DBI:MariaDB:database=anime;host=localhost";
-my $dbh = DBI->connect($dsn, '<enter username>', $password);
+my $dbh = DBI->connect($dsn, $username, $password);
 
 for (@{$data->{data}}) {
 	print $_->{url}."\n";
